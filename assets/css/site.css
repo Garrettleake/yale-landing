@@ -955,3 +955,41 @@ a.card:hover .card__media img { transform: scale(1.03); }
   text-decoration: none; border-bottom: 1px solid rgba(255,255,255,.22);
 }
 .footer-legal a:hover { color: #fff; border-bottom-color: #fff; }
+
+
+/* ---------- Lease page: property facts + FAQ ---------- */
+.facts-table {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 0 2.5rem; margin-top: 2rem;
+}
+.facts-table > div {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 1.5rem;
+  padding: .85rem 0; border-bottom: 1px solid var(--line);
+}
+.facts-table span {
+  font-family: var(--display); font-size: .68rem; font-weight: 600;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--gray);
+  flex: none;
+}
+.facts-table strong { font-weight: 500; text-align: right; font-size: .95rem; }
+.facts-note { margin-top: 1.6rem; font-size: .8rem; color: var(--gray); }
+.facts-note a { color: var(--gray); }
+
+.faq { margin-top: 2rem; border-top: 1px solid var(--line); }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary {
+  cursor: pointer; list-style: none; padding: 1.15rem 2rem 1.15rem 0; position: relative;
+  font-family: var(--display); font-weight: 700; font-size: 1rem; letter-spacing: -.01em;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: "+"; position: absolute; right: .2rem; top: 50%; transform: translateY(-50%);
+  font-size: 1.3rem; font-weight: 400; color: var(--terracotta); line-height: 1;
+}
+.faq details[open] summary::after { content: "\2013"; }
+.faq summary:hover { color: var(--terracotta); }
+.faq details p { margin: 0 0 1.3rem; color: var(--gray); font-size: .95rem; max-width: 62ch; }
+@media (max-width: 560px) {
+  .facts-table > div { flex-direction: column; gap: .2rem; }
+  .facts-table strong { text-align: left; }
+}

@@ -289,6 +289,11 @@ p:last-child { margin-bottom: 0; }
 .hero__lede { color: rgba(255,255,255,.88); font-size: clamp(1rem, 1.6vw, 1.15rem); max-width: 44ch; }
 .hero__actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; max-width: none; }
 /* Small honest credit — the hero is a rendering, not a photograph */
+.page-hero__credit {
+  position: absolute; right: .7rem; bottom: .55rem; z-index: 2; margin: 0;
+  font-size: .58rem; letter-spacing: .16em; text-transform: uppercase;
+  color: rgba(255,255,255,.75); text-shadow: 0 1px 4px rgba(0,0,0,.6);
+}
 .hero__credit {
   position: absolute; right: 1rem; bottom: .75rem; z-index: 3; margin: 0;
   font-size: .6rem; letter-spacing: .16em; text-transform: uppercase;
@@ -992,4 +997,16 @@ a.card:hover .card__media img { transform: scale(1.03); }
 @media (max-width: 560px) {
   .facts-table > div { flex-direction: column; gap: .2rem; }
   .facts-table strong { text-align: left; }
+}
+
+
+/* ---------- Lease page: real frontage banner ---------- */
+.lease-banner { margin: 0 0 2.5rem; }
+.lease-banner img {
+  width: 100%; height: auto; display: block;
+  border: 1px solid rgba(255,255,255,.16);
+}
+.lease-banner figcaption {
+  margin-top: .7rem; font-family: var(--display); font-size: .68rem; font-weight: 600;
+  letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.6);
 }

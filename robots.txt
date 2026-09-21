@@ -1,10 +1,4 @@
-# Yale Landing — client preview. Not the live site.
-#
-# Crawling is allowed ON PURPOSE so crawlers can read the noindex tag on every
-# page. Blocking here would prevent that and could leave bare URLs indexed.
-# Every page returns: noindex, nofollow, noarchive, nosnippet, noimageindex.
-
 User-agent: *
 Allow: /
 
-# No sitemap is published for the preview.
+Sitemap: https://yalelandingabq.com/sitemap.xml

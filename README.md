@@ -1,18 +1,17 @@
-# Yale Landing — client preview
+# Yale Landing — yalelandingabq.com
 
-Preview build for review only.
+Production build of the Yale Landing website, served by GitHub Pages at
+**https://yalelandingabq.com** (`CNAME` in this repo). yalelanding.com and
+2500yalelanding.com redirect here from the registrar.
 
-**Not searchable.** Every page carries
-`noindex, nofollow, noarchive, nosnippet, noimageindex` for Google, Bing
-and Yahoo, and no sitemap is published.
+Pages are indexed and `sitemap.xml` is published. Paths are root-absolute,
+so this build only works at the custom domain — not at a `github.io/REPO/`
+address.
 
-robots.txt deliberately *allows* crawling. That looks backwards, but a
-blanket `Disallow: /` would stop crawlers fetching the pages at all, so
-they would never read the noindex — and Google can still index a blocked
-URL from inbound links alone. Allowing the crawl is what makes the
-noindex bite.
+`/pdf` redirects straight to the current leasing brochure
+(`assets/lease/yale-landing-leasing-brochure.pdf`). It is the link used in
+email campaigns.
 
-Paths are relative, so this works at any `github.io/REPO/` address.
-
-Rebuild with `python3 build-preview.py` from the parent folder.
-The production build for the real domain lives in `docs/`.
+Source lives in the `yale-site` folder next to this clone. Rebuild with
+`python3 build.py` there and copy `docs/` over this folder — never edit
+these files directly.

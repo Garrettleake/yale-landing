@@ -30,8 +30,6 @@
 <style>
   .signup-box { max-width: 600px; margin: 0 auto; }
   .signup-box > * { max-width: 100%; }
-  .signup-hint { display: none; text-align: center; font-size: 1.05rem; padding: 1.5rem; border: 1px solid var(--line); }
-  .signup-hint.is-visible { display: block; }
   .signup-alt { text-align: center; margin-top: 1.6rem; color: var(--gray); }
 </style>
 </head>
@@ -92,17 +90,7 @@
     <div class="signup-box" id="signup-box">
       <script src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="6ab1ce7d5853991db9a51d73"></script>
       <noscript><p>This page needs JavaScript to show the sign-up. Ted Bustos&rsquo;s contact details are on the <a href="/lease/">leasing page</a>.</p></noscript>
-      <p class="signup-hint" id="signup-hint">Tap the blue message button in the bottom-right corner of this page to sign up.</p>
     </div>
-    <script>
-      // The sign-up renders inline when the widget is set to embedded; when it is set to a
-      // corner bubble instead, show a pointer to it so the page never looks empty.
-      setTimeout(function () {
-        var w = document.querySelector('.signup-box chat-widget');
-        var inline = w && w.getBoundingClientRect().height > 120;
-        if (!inline) { document.getElementById('signup-hint').className += ' is-visible'; }
-      }, 3500);
-    </script>
     <p class="signup-alt">Full terms for these messages are on the <a href="/text-terms/">Text Message Terms</a> page.<br>Prefer not to sign up? Ted&rsquo;s direct contact details are on the <a href="/lease/">leasing page</a>.</p>
   </div>
 </section>

@@ -152,7 +152,8 @@ p:last-child { margin-bottom: 0; }
    changes the bar itself — the page underneath never jumps, and the
    compact/expand toggle can't feed back into the scroll position. */
 html.hdr-fixed .site-header { position: fixed; left: 0; right: 0; max-width: none; }
-html.hdr-fixed body { padding-top: var(--hdr-h, 0px); }
+html.hdr-fixed body { padding-top: var(--hdr-h, 0px); transition: padding-top .28s ease; }
+html.hdr-fixed.hdr-compact body { padding-top: var(--hdr-c, 0px); }
 html.hdr-fixed { scroll-padding-top: var(--hdr-c, 0px); }
 .header-top {
   width: min(var(--wrap), 100% - (var(--gut) * 2)); margin-inline: auto;
@@ -264,7 +265,7 @@ html.hdr-fixed { scroll-padding-top: var(--hdr-c, 0px); }
   .btn { padding: .75rem 1.1rem; font-size: .68rem; letter-spacing: .13em; }
 }
 @media (max-width: 400px) {
-  .brand-rule { display: none; }
+  .site-header .brand-rule, .site-header .brand-dash { display: none; }
 }
 
 /* ---------- Hero (full bleed) ----------

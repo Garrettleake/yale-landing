@@ -22,16 +22,15 @@
   }
 
   // Header shrinks on scroll: full-size lockup at the top of the page,
-  // compact bar once you start reading.
+  // compact bar as soon as you start reading.
   //
-  // The header is position:fixed (html.hdr-fixed) and the body reserves the
-  // full-size height in --hdr-h, so shrinking the bar never moves the page.
-  // Two thresholds (compact past one, expand back only well above it) stop
-  // the bar flapping when the scroll position sits right on the line.
+  // The header is position:fixed (html.hdr-fixed) and the body reserves its
+  // height (--hdr-h at rest, --hdr-c when compact, animated together with
+  // the bar), so the page slides up smoothly instead of jumping, and the
+  // toggle can't feed back into the scroll position.
   var header = document.querySelector(".site-header");
   if (header) {
     var root = document.documentElement;
-    var fullH = 0, compactH = 0, compactAt = 90, expandAt = 30;
     var ticking = false;
 
     // Measure the bar in a given state without disturbing the real one:
@@ -55,21 +54,19 @@
     var calibrate = function () {
       var f = measure(false), k = measure(true);
       if (!f || !k) return;
-      fullH = f; compactH = k;
-      root.style.setProperty("--hdr-h", fullH + "px");
-      root.style.setProperty("--hdr-c", compactH + "px");
-      // Shrink only once the page has scrolled at least as far as the bar
-      // will shrink (plus a little hysteresis), and grow back as soon as it
-      // hasn't — so no blank band ever opens between the bar and the content.
-      var delta = fullH - compactH;
-      expandAt = Math.max(40, delta);
-      compactAt = expandAt + 40;
+      root.style.setProperty("--hdr-h", f + "px");
+      root.style.setProperty("--hdr-c", k + "px");
     };
 
+    var setCompact = function (on) {
+      header.classList.toggle("is-compact", on);
+      root.classList.toggle("hdr-compact", on);
+    };
+    // Compact a few pixels in; expand again only at the very top.
     var sync = function () {
       var y = window.scrollY || window.pageYOffset;
-      if (y > compactAt) header.classList.add("is-compact");
-      else if (y < expandAt) header.classList.remove("is-compact");
+      if (y > 12) setCompact(true);
+      else if (y < 4) setCompact(false);
       ticking = false;
     };
     var onScroll = function () {

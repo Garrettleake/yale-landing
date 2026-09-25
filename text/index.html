@@ -30,7 +30,17 @@
 <style>
   .signup-box { max-width: 600px; margin: 0 auto; }
   .signup-box > * { max-width: 100%; }
+  /* Tall enough that the whole form, including the consent checkbox, shows
+     without scrolling inside the widget (carrier reviewers screenshot the page). */
+  .signup-box chat-widget { --chat-widget-height: 720px; --chat-widget-max-height: 720px; }
   .signup-alt { text-align: center; margin-top: 1.6rem; color: var(--gray); }
+  .consent-box { max-width: 600px; margin: 2.4rem auto 0; padding: 1.4rem 1.6rem; border: 1px solid var(--line); border-radius: 12px; background: var(--peach); }
+  .consent-box h2 { font-size: 1.05rem; margin: 0 0 .7rem; }
+  .consent-box p, .consent-box li { font-size: .93rem; line-height: 1.55; color: var(--black); }
+  .consent-box ul { padding-left: 1.2rem; margin: .6rem 0 0; }
+  .consent-box li { margin: .3rem 0; }
+  .consent-quote { margin: .7rem 0; padding: .8rem 1rem; border-left: 3px solid var(--black); background: #fff; font-size: .9rem; }
+  .consent-quote .fakebox { display: inline-block; width: 13px; height: 13px; border: 1.5px solid var(--gray); border-radius: 3px; vertical-align: -2px; margin-right: .45rem; background: #fff; }
 </style>
 </head>
 
@@ -92,6 +102,18 @@
       <noscript><p>This page needs JavaScript to show the sign-up. Ted Bustos&rsquo;s contact details are on the <a href="/lease/">leasing page</a>.</p></noscript>
     </div>
     <p class="signup-alt">Full terms for these messages are on the <a href="/text-terms/">Text Message Terms</a> page.<br>Prefer not to sign up? Ted&rsquo;s direct contact details are on the <a href="/lease/">leasing page</a>.</p>
+    <div class="consent-box" id="how-it-works">
+      <h2>How the text sign-up works</h2>
+      <p>The form above asks for your name and mobile number. Your consent is a separate checkbox that is <strong>unchecked until you tick it</strong> &mdash; the &ldquo;Text me&rdquo; button stays disabled until you do. Nothing is pre-selected. The checkbox reads:</p>
+      <div class="consent-quote"><span class="fakebox" aria-hidden="true"></span>By submitting, you authorize 2500 Yale, LLC to text/call the number above for promotional messages, possibly using automated means. Msg/data rates apply, msg frequency varies. Consent is not a condition of purchase. See <a href="/text-terms/">terms</a> and <a href="/privacy/">privacy policy</a>. Text HELP for help and STOP to unsubscribe.</div>
+      <ul>
+        <li><strong>Program:</strong> Yale Landing leasing updates, sent by Ted Bustos, leasing broker for 2500 Yale, LLC (the owner of Yale Landing, 2500 Yale Blvd SE, Albuquerque, NM 87106).</li>
+        <li><strong>What you get:</strong> availability and pricing for the two suites for lease, the brochure link, and walk-through / tour scheduling.</li>
+        <li><strong>How often:</strong> up to 4 messages a month. Message and data rates may apply.</li>
+        <li><strong>Stopping:</strong> reply STOP at any time and the messages end. Reply HELP for help, or call (505) 948-9171.</li>
+        <li><strong>Your number:</strong> we do not sell or share your mobile number or your consent with anyone else for their marketing. Full details: <a href="/text-terms/">Text Message Terms</a> and <a href="/privacy/">Privacy Policy</a>.</li>
+      </ul>
+    </div>
   </div>
 </section>
 

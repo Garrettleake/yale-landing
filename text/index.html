@@ -27,20 +27,61 @@
 <link rel="icon" href="/assets/img/logos/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="/assets/img/logos/favicon-180.png">
 <link rel="stylesheet" href="/assets/css/site.css">
+<script>
+  /* Embed mode: the leasing page opens this form in a bottom-right panel (an
+     iframe of this same page). Hide the chrome so only the form shows. */
+  if (/[?&]embed=1/.test(location.search) || window.self !== window.top) {
+    document.documentElement.classList.add("is-embed");
+  }
+</script>
 <style>
   .signup-box { max-width: 600px; margin: 0 auto; }
-  .signup-box > * { max-width: 100%; }
-  /* Tall enough that the whole form, including the consent checkbox, shows
-     without scrolling inside the widget (carrier reviewers screenshot the page). */
-  .signup-box chat-widget { --chat-widget-height: 720px; --chat-widget-max-height: 720px; }
   .signup-alt { text-align: center; margin-top: 1.6rem; color: var(--gray); }
+
+  /* The sign-up form (plain HTML so every reviewer and every browser sees the
+     same thing: an unchecked consent box, the disclosures, and the links). */
+  .txt-form { display: grid; gap: 1.1rem; }
+  .txt-form .row { display: grid; gap: 1.1rem; grid-template-columns: 1fr 1fr; }
+  @media (max-width: 520px) { .txt-form .row { grid-template-columns: 1fr; } }
+  .txt-form label.lbl { display: block; font-family: var(--display); font-weight: 600; font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; color: var(--gray); margin: 0 0 .4rem; }
+  .txt-form label.lbl small { text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--gray-lt); }
+  .txt-form input[type="text"], .txt-form input[type="tel"], .txt-form input[type="email"], .txt-form select {
+    width: 100%; font: inherit; font-size: 1rem; color: var(--black); background: #fff;
+    border: 1.5px solid var(--line); border-radius: 8px; padding: .85rem 1rem; outline: none;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .txt-form input:focus, .txt-form select:focus { border-color: var(--black); box-shadow: 0 0 0 3px rgba(11,27,51,.12); }
+  .txt-form select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 16 16'><path d='M4 6l4 4 4-4' fill='none' stroke='%235A6478' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>"); background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.6rem; }
+  .txt-consent { display: grid; grid-template-columns: auto 1fr; gap: .8rem; align-items: start; padding: 1rem 1.1rem; border: 1.5px solid var(--line); border-radius: 10px; background: var(--peach); }
+  .txt-consent input[type="checkbox"] { width: 20px; height: 20px; margin: .15rem 0 0; accent-color: var(--black); cursor: pointer; flex: none; }
+  .txt-consent label { font-size: .9rem; line-height: 1.55; color: var(--black); cursor: pointer; }
+  .txt-consent a { color: var(--black); text-decoration: underline; text-underline-offset: 3px; }
+  .txt-fine { font-size: .8rem; line-height: 1.5; color: var(--gray); margin: 0; }
+  .txt-form .btn { width: 100%; }
+  .txt-form .btn[disabled] { opacity: .55; cursor: not-allowed; transform: none; box-shadow: none; }
+  .txt-hp { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+  .txt-msg { display: none; padding: 1.2rem 1.4rem; border-radius: 10px; font-size: .95rem; line-height: 1.55; }
+  .txt-msg.is-ok { display: block; background: #E7F4EA; border: 1.5px solid #9BCBA8; color: #173D22; }
+  .txt-msg.is-err { display: block; background: #FBEAEA; border: 1.5px solid #E5A3A3; color: #5A1B1B; }
+  .txt-msg strong { display: block; font-family: var(--display); font-size: 1.05rem; margin-bottom: .3rem; }
+  .txt-form.is-sent { display: none; }
+
+  /* Reviewer-facing description of the program, under the form. */
   .consent-box { max-width: 600px; margin: 2.4rem auto 0; padding: 1.4rem 1.6rem; border: 1px solid var(--line); border-radius: 12px; background: var(--peach); }
   .consent-box h2 { font-size: 1.05rem; margin: 0 0 .7rem; }
   .consent-box p, .consent-box li { font-size: .93rem; line-height: 1.55; color: var(--black); }
   .consent-box ul { padding-left: 1.2rem; margin: .6rem 0 0; }
   .consent-box li { margin: .3rem 0; }
-  .consent-quote { margin: .7rem 0; padding: .8rem 1rem; border-left: 3px solid var(--black); background: #fff; font-size: .9rem; }
-  .consent-quote .fakebox { display: inline-block; width: 13px; height: 13px; border: 1.5px solid var(--gray); border-radius: 3px; vertical-align: -2px; margin-right: .45rem; background: #fff; }
+
+  /* Embed (panel on the leasing page): form only, tighter spacing. */
+  html.is-embed body { padding-top: 0 !important; background: #fff; }
+  html.is-embed .site-header, html.is-embed .site-footer, html.is-embed .skip-link,
+  html.is-embed .legal-head, html.is-embed .signup-alt, html.is-embed .consent-box { display: none !important; }
+  html.is-embed .section { padding: 1.25rem 0 1.5rem; }
+  html.is-embed .wrap-narrow { width: min(820px, 100% - 2.4rem); }
+  html.is-embed .txt-form { gap: .85rem; }
+  html.is-embed .txt-embed-lede { display: block; }
+  .txt-embed-lede { display: none; font-size: .92rem; color: var(--gray); margin: 0 0 1rem; line-height: 1.5; }
 </style>
 </head>
 
@@ -88,9 +129,9 @@
     <p class="kicker">Leasing</p>
     <h1>Get leasing updates by text</h1>
     <p class="lede">
-      Two suites are left at Yale Landing. Sign up below and Ted Bustos will keep you posted
-      on availability, pricing, the brochure and tours &mdash; a few messages a month at most.
-      Reply STOP any time to end them.
+      Two suites are left at Yale Landing. Leave your number and Ted Bustos, the leasing
+      broker, will keep you posted on availability, pricing, the brochure and tours &mdash;
+      up to four texts a month. Reply STOP any time to end them.
     </p>
   </div>
 </section>
@@ -98,18 +139,69 @@
 <section class="section">
   <div class="wrap-narrow">
     <div class="signup-box" id="signup-box">
-      <script src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="6ab1ce7d5853991db9a51d73"></script>
-      <noscript><p>This page needs JavaScript to show the sign-up. Ted Bustos&rsquo;s contact details are on the <a href="/lease/">leasing page</a>.</p></noscript>
+      <p class="txt-embed-lede">Leave your number and Ted Bustos, the leasing broker for Yale Landing, will text you about the two suites for lease. Up to 4 texts a month; reply STOP any time.</p>
+
+      <form class="txt-form" id="txt-form" method="post" action="https://services.leadconnectorhq.com/hooks/YQC8E5IOeW5GVntEldiw/webhook-trigger/8b05aacb-fddd-4e61-807f-b7696973f8d3" novalidate>
+        <div class="row">
+          <div>
+            <label class="lbl" for="txt-first">First name</label>
+            <input type="text" id="txt-first" name="first_name" autocomplete="given-name" required maxlength="60">
+          </div>
+          <div>
+            <label class="lbl" for="txt-last">Last name</label>
+            <input type="text" id="txt-last" name="last_name" autocomplete="family-name" required maxlength="60">
+          </div>
+        </div>
+        <div>
+          <label class="lbl" for="txt-phone">Mobile number</label>
+          <input type="tel" id="txt-phone" name="phone" autocomplete="tel" inputmode="tel" placeholder="(505) 555-0123" required maxlength="24">
+        </div>
+        <div class="row">
+          <div>
+            <label class="lbl" for="txt-email">Email <small>(optional)</small></label>
+            <input type="email" id="txt-email" name="email" autocomplete="email" maxlength="120">
+          </div>
+          <div>
+            <label class="lbl" for="txt-interest">Which space? <small>(optional)</small></label>
+            <select id="txt-interest" name="interest">
+              <option value="">Either / not sure yet</option>
+              <option value="Suite B - 3,550 SF retail with patio">Suite B &mdash; &plusmn;3,550 SF retail + patio</option>
+              <option value="Suites E+F - 12,600 SF flex, divisible from 4,000 SF">Suites E+F &mdash; &plusmn;12,600 SF flex (divisible)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="txt-consent">
+          <input type="checkbox" id="txt-consent" name="sms_consent" value="yes">
+          <label for="txt-consent">By checking this box, I agree to receive promotional and informational text messages (leasing updates) from 2500 Yale, LLC / Yale Landing at the mobile number above, which may be sent using an automated system. Up to 4 msgs per month; msg frequency varies. Msg &amp; data rates may apply. Consent is not a condition of leasing or any purchase. Reply STOP to unsubscribe or HELP for help. See our <a href="/text-terms/">Text Message Terms</a> and <a href="/privacy/">Privacy Policy</a>.</label>
+        </div>
+
+        <p class="txt-fine">Leave the box unchecked and Ted will follow up by phone or email instead &mdash; you will not receive marketing texts. Your number is never sold or shared with anyone else for their marketing.</p>
+
+        <div class="txt-hp" aria-hidden="true">
+          <label for="txt-company">Company (leave blank)</label>
+          <input type="text" id="txt-company" name="company_website" tabindex="-1" autocomplete="off">
+        </div>
+
+        <input type="hidden" name="source" value="yalelandingabq.com/text">
+        <input type="hidden" name="consent_text" value="By checking this box, I agree to receive promotional and informational text messages (leasing updates) from 2500 Yale, LLC / Yale Landing at the mobile number above, which may be sent using an automated system. Up to 4 msgs per month; msg frequency varies. Msg & data rates may apply. Consent is not a condition of leasing or any purchase. Reply STOP to unsubscribe or HELP for help. See our Text Message Terms and Privacy Policy.">
+
+        <button class="btn btn--solid" type="submit" id="txt-submit">Send to Ted</button>
+        <p class="txt-fine" style="text-align:center">Prefer to call? Ted Bustos, <a href="tel:+15059489171">(505) 948-9171</a>.</p>
+      </form>
+
+      <div class="txt-msg" id="txt-msg" role="status" aria-live="polite"></div>
     </div>
+
     <p class="signup-alt">Full terms for these messages are on the <a href="/text-terms/">Text Message Terms</a> page.<br>Prefer not to sign up? Ted&rsquo;s direct contact details are on the <a href="/lease/">leasing page</a>.</p>
+
     <div class="consent-box" id="how-it-works">
       <h2>How the text sign-up works</h2>
-      <p>The form above asks for your name and mobile number. Your consent is a separate checkbox that is <strong>unchecked until you tick it</strong> &mdash; the &ldquo;Text me&rdquo; button stays disabled until you do. Nothing is pre-selected. The checkbox reads:</p>
-      <div class="consent-quote"><span class="fakebox" aria-hidden="true"></span>By submitting, you authorize 2500 Yale, LLC to text/call the number above for promotional messages, possibly using automated means. Msg/data rates apply, msg frequency varies. Consent is not a condition of purchase. See <a href="/text-terms/">terms</a> and <a href="/privacy/">privacy policy</a>. Text HELP for help and STOP to unsubscribe.</div>
+      <p>The form above asks for your name and mobile number. Your consent to receive texts is a separate checkbox that is <strong>unchecked until you tick it</strong>, and ticking it is optional &mdash; nothing is pre-selected, and you can send the form without it (Ted will then call or email instead).</p>
       <ul>
         <li><strong>Program:</strong> Yale Landing leasing updates, sent by Ted Bustos, leasing broker for 2500 Yale, LLC (the owner of Yale Landing, 2500 Yale Blvd SE, Albuquerque, NM 87106).</li>
-        <li><strong>What you get:</strong> availability and pricing for the two suites for lease, the brochure link, and walk-through / tour scheduling.</li>
-        <li><strong>How often:</strong> up to 4 messages a month. Message and data rates may apply.</li>
+        <li><strong>Message type:</strong> promotional and informational texts about the two suites for lease &mdash; availability, pricing, the brochure link, and walk-through / tour scheduling.</li>
+        <li><strong>How often:</strong> up to 4 messages a month; frequency varies. Message and data rates may apply.</li>
         <li><strong>Stopping:</strong> reply STOP at any time and the messages end. Reply HELP for help, or call (505) 948-9171.</li>
         <li><strong>Your number:</strong> we do not sell or share your mobile number or your consent with anyone else for their marketing. Full details: <a href="/text-terms/">Text Message Terms</a> and <a href="/privacy/">Privacy Policy</a>.</li>
       </ul>
@@ -175,6 +267,61 @@
   </div>
 </footer>
 
+<script>
+(function () {
+  "use strict";
+  var form = document.getElementById("txt-form"), msg = document.getElementById("txt-msg");
+  if (!form) return;
+  var embed = document.documentElement.classList.contains("is-embed");
+  if (embed) form.querySelectorAll("a[href]").forEach(function (a) { a.target = "_blank"; a.rel = "noopener"; });
+
+  var show = function (ok, title, body) {
+    msg.className = "txt-msg " + (ok ? "is-ok" : "is-err");
+    msg.innerHTML = "<strong>" + title + "</strong>" + body;
+    if (ok) form.classList.add("is-sent");
+    msg.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  };
+  var normalize = function (raw) {
+    var d = raw.replace(/\D/g, "");
+    if (d.length === 11 && d.charAt(0) === "1") d = d.slice(1);
+    return d.length === 10 ? "+1" + d : "";
+  };
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var f = form.elements;
+    var first = f.first_name.value.trim(), last = f.last_name.value.trim(), phoneRaw = f.phone.value.trim();
+    var phone = normalize(phoneRaw);
+    if (!first || !last) { show(false, "Almost there", "Please add your first and last name."); return; }
+    if (!phone) { show(false, "Check the number", "Please enter a 10-digit US mobile number, e.g. (505) 555-0123."); return; }
+    if (f.company_website.value) { show(true, "Thanks!", "Ted will be in touch."); return; }
+
+    var consent = f.sms_consent.checked;
+    var payload = {
+      first_name: first, last_name: last, phone: phone, phone_as_entered: phoneRaw,
+      email: f.email.value.trim(), interest: f.interest.value,
+      sms_consent: consent ? "yes" : "no",
+      consent_text: consent ? f.consent_text.value : "",
+      consent_method: consent ? "Website form checkbox, unchecked by default, ticked by the visitor" : "Checkbox left unchecked - no SMS consent",
+      consent_timestamp: new Date().toISOString(),
+      consent_page: (embed ? "https://yalelandingabq.com/lease/ (panel loading /text/)" : location.href),
+      source: "yalelandingabq.com/text", user_agent: navigator.userAgent
+    };
+    var btn = document.getElementById("txt-submit");
+    btn.disabled = true; btn.textContent = "Sending…";
+    fetch(form.action, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
+      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.text(); })
+      .then(function () {
+        if (consent) show(true, "You’re on the list, " + first + ".", "Ted will text you from a local (505) number. Up to 4 messages a month; reply STOP at any time to end them, or HELP for help.");
+        else show(true, "Thanks, " + first + ".", "Ted will follow up by phone or email. You will not receive marketing texts unless you tick the box.");
+      })
+      .catch(function () {
+        btn.disabled = false; btn.textContent = "Send to Ted";
+        show(false, "That didn’t go through", "Please try again in a moment, or call or text Ted directly at <a href=\"tel:+15059489171\">(505) 948-9171</a>.");
+      });
+  });
+})();
+</script>
 <script src="/assets/js/site.js"></script>
 </body>
 </html>

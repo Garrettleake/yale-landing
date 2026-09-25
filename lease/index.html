@@ -150,6 +150,34 @@
   ]
 }
 </script>
+<style>
+  /* "Get leasing updates by text" — bottom-right launcher + panel. The panel
+     loads /text/ in embed mode, so the sign-up form lives in exactly one place. */
+  .txt-launch { position: fixed; right: 18px; bottom: 18px; z-index: 900; display: inline-flex; align-items: center; gap: .55rem;
+    padding: .85rem 1.2rem .85rem 1rem; background: var(--black); color: #fff; border: 0; border-radius: 999px;
+    font-family: var(--display); font-weight: 600; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase;
+    box-shadow: 0 10px 28px rgba(11,27,51,.32); cursor: pointer; transition: transform .18s ease, background-color .18s ease; }
+  .txt-launch:hover { background: var(--terracotta); transform: translateY(-1px); }
+  .txt-launch svg { width: 18px; height: 18px; flex: none; }
+  .txt-launch .short { display: none; }
+  @media (max-width: 560px) { .txt-launch { right: 14px; bottom: 14px; } .txt-launch .long { display: none; } .txt-launch .short { display: inline; } }
+  body.txt-open .txt-launch { display: none; }
+  .txt-panel { position: fixed; right: 18px; bottom: 18px; z-index: 950; width: min(420px, calc(100vw - 36px)); height: min(700px, calc(100vh - 36px));
+    display: flex; flex-direction: column; background: #fff; border-radius: 16px; box-shadow: 0 24px 64px rgba(11,27,51,.35); overflow: hidden;
+    transform: translateY(16px); opacity: 0; transition: transform .22s ease, opacity .22s ease; }
+  .txt-panel[hidden] { display: none; }
+  .txt-panel.is-open { transform: none; opacity: 1; }
+  .txt-panel__head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .9rem 1rem .9rem 1.15rem; background: var(--black); color: #fff; }
+  .txt-panel__title { margin: 0; font-family: var(--display); font-weight: 700; font-size: .95rem; letter-spacing: .02em; color: #fff; }
+  .txt-panel__sub { margin: .15rem 0 0; font-size: .78rem; color: rgba(255,255,255,.7); }
+  .txt-panel__close { flex: none; width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(255,255,255,.3); background: transparent; color: #fff; font-size: 1.35rem; line-height: 1; cursor: pointer; }
+  .txt-panel__close:hover { background: rgba(255,255,255,.12); }
+  .txt-panel__frame { flex: 1; width: 100%; border: 0; background: #fff; }
+  .txt-panel__foot { margin: 0; padding: .55rem 1rem; font-size: .74rem; text-align: center; color: var(--gray); border-top: 1px solid var(--line); }
+  .txt-panel__foot a { color: var(--black); }
+  @media (max-width: 560px) { .txt-panel { right: 0; bottom: 0; width: 100vw; height: 100dvh; border-radius: 0; } }
+  @media (prefers-reduced-motion: reduce) { .txt-panel, .txt-launch { transition: none; } }
+</style>
 </head>
 
 <body>
@@ -337,9 +365,9 @@
     </div>
 
     <div class="lease-contact" style="max-width:60ch">
-      <strong>Ted Bustos · Coe Properties</strong>
+      <strong>Ted Bustos · Leasing Broker</strong>
       (505) 948-9171 call or text · ted@coeandpeterson.com<br>
-      Office (505) 881-4529. Call for rates, terms, floor plans and a tour.
+      Call for rates, terms, floor plans and a tour, or <a href="/text/">get updates by text</a>.
     </div>
   </div>
 </section>
@@ -428,8 +456,8 @@
         <p>Both suites deliver in shell condition. Build-to-suit arrangements and TI allowances are
         negotiable for a qualified operator.</p></details>
       <details><summary>Who do I contact?</summary>
-        <p>Ted Bustos at Coe Properties — <a href="tel:+15059489171">(505) 948-9171</a>, call or text.
-        Office (505) 881-4529. Ask for rates, terms, floor plans and a tour. Or
+        <p>Ted Bustos, the leasing broker — <a href="tel:+15059489171">(505) 948-9171</a>, call or text.
+        Ask for rates, terms, floor plans and a tour. Or
         <a href="/text/">leave your number</a> and he will text you.</p></details>
     </div>
   </div>
@@ -493,6 +521,55 @@
   </div>
 </footer>
 
+<!-- Bottom-right "text me updates" launcher: opens /text/ (embed mode) in a panel -->
+<button class="txt-launch" id="txt-launch" type="button" aria-controls="txt-panel" aria-expanded="false">
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.4 3.5c-.5.4-1.2 0-1.2-.6V16A2.5 2.5 0 0 1 4 13.5v-8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 8.5h8M8 11.5h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+  <span class="long">Get leasing updates by text</span><span class="short">Text updates</span>
+</button>
+<div class="txt-panel" id="txt-panel" role="dialog" aria-labelledby="txt-panel-title" hidden>
+  <div class="txt-panel__head">
+    <div>
+      <p class="txt-panel__title" id="txt-panel-title">Leasing updates by text</p>
+      <p class="txt-panel__sub">Ted Bustos &middot; (505) 948-9171</p>
+    </div>
+    <button class="txt-panel__close" type="button" aria-label="Close">&times;</button>
+  </div>
+  <iframe class="txt-panel__frame" title="Sign up for leasing updates by text" data-src="/text/?embed=1"></iframe>
+  <p class="txt-panel__foot"><a href="/text/" data-no-panel>Open the full sign-up page</a> &middot; <a href="/text-terms/">Text terms</a></p>
+</div>
+<script>
+(function () {
+  "use strict";
+  var launch = document.getElementById("txt-launch"), panel = document.getElementById("txt-panel");
+  if (!launch || !panel) return;
+  var frame = panel.querySelector("iframe"), closeBtn = panel.querySelector(".txt-panel__close"), last = null, timer;
+  var open = function () {
+    if (!frame.getAttribute("src")) frame.src = frame.getAttribute("data-src");
+    clearTimeout(timer);
+    panel.hidden = false;
+    requestAnimationFrame(function () { panel.classList.add("is-open"); });
+    document.body.classList.add("txt-open");
+    launch.setAttribute("aria-expanded", "true");
+    last = document.activeElement;
+    closeBtn.focus();
+  };
+  var close = function () {
+    panel.classList.remove("is-open");
+    document.body.classList.remove("txt-open");
+    launch.setAttribute("aria-expanded", "false");
+    timer = setTimeout(function () { panel.hidden = true; }, 220);
+    if (last && last.focus) last.focus();
+  };
+  launch.addEventListener("click", open);
+  closeBtn.addEventListener("click", close);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !panel.hidden) close(); });
+  // Links to the text page on this page open the panel instead (plain navigation without JS).
+  document.querySelectorAll('a[href$="text.html"], a[href="/text/"]').forEach(function (a) {
+    if (a.hasAttribute("data-no-panel")) return;
+    a.addEventListener("click", function (e) { e.preventDefault(); open(); });
+  });
+})();
+</script>
 <script src="/assets/js/site.js"></script>
 </body>
 </html>

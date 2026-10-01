@@ -1018,3 +1018,47 @@ a.card:hover .card__media img { transform: scale(1.03); }
   margin-top: .7rem; font-family: var(--display); font-size: .68rem; font-weight: 600;
   letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.6);
 }
+
+/* ---------- Get directions chooser (Apple Maps / Google Maps / Waze) ---------- */
+.dir-sheet {
+  position: fixed; inset: 0; z-index: 1000;
+  display: flex; align-items: center; justify-content: center; padding: 1rem;
+  background: rgba(5,16,31,0); transition: background-color .18s ease;
+}
+.dir-sheet[hidden] { display: none; }
+.dir-sheet.is-open { background: rgba(5,16,31,.55); }
+.dir-sheet__panel {
+  width: 100%; max-width: 380px; background: var(--white); color: var(--black);
+  padding: 1.6rem 1.5rem 1.1rem; box-shadow: 0 18px 50px rgba(5,16,31,.35);
+  opacity: 0; transform: translateY(10px); transition: opacity .18s ease, transform .18s ease;
+}
+.dir-sheet.is-open .dir-sheet__panel { opacity: 1; transform: none; }
+.dir-sheet__kicker {
+  margin: 0 0 .35rem; font-family: var(--display); font-size: .68rem; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--terracotta);
+}
+.dir-sheet__title { margin: 0 0 .2rem; font-size: 1.45rem; text-transform: uppercase; }
+.dir-sheet__addr { margin: 0 0 1.1rem; font-size: .9rem; color: var(--gray); }
+.dir-sheet__opts { display: grid; gap: .55rem; }
+.dir-sheet__opt {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .95rem 1.1rem; border: 1.5px solid var(--black); text-decoration: none;
+  font-family: var(--display); font-size: .82rem; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--black); background: var(--white);
+  transition: background-color .15s ease, color .15s ease;
+}
+.dir-sheet__opt:hover, .dir-sheet__opt:focus-visible { background: var(--black); color: var(--white); outline: none; }
+.dir-sheet__cancel {
+  display: block; width: 100%; margin-top: .6rem; padding: .8rem; border: 0; background: none;
+  font-family: var(--display); font-size: .74rem; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--gray); cursor: pointer;
+}
+.dir-sheet__cancel:hover, .dir-sheet__cancel:focus-visible { color: var(--black); }
+html.dir-open { overflow: hidden; }
+@media (max-width: 600px) {
+  .dir-sheet { align-items: flex-end; padding: 0; }
+  .dir-sheet__panel {
+    max-width: none; padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+    transform: translateY(100%);
+  }
+}

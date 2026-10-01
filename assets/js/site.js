@@ -91,6 +91,82 @@
     window.addEventListener("load", recal);
   }
 
+  // "Get directions" chooser: every Google Maps directions link on the site
+  // opens a small menu (Apple Maps / Google Maps / Waze) instead. Without JS
+  // the links still go straight to Google Maps.
+  var ADDR = "2500 Yale Blvd SE, Albuquerque, NM 87106";
+  var LL = "35.0543,-106.6217";
+  var sheet, lastTrigger;
+
+  var buildSheet = function () {
+    sheet = document.createElement("div");
+    sheet.className = "dir-sheet";
+    sheet.hidden = true;
+    sheet.innerHTML =
+      '<div class="dir-sheet__panel" role="dialog" aria-modal="true" aria-labelledby="dir-sheet-title">' +
+        '<p class="dir-sheet__kicker">Get directions</p>' +
+        '<h2 class="dir-sheet__title" id="dir-sheet-title">Yale Landing</h2>' +
+        '<p class="dir-sheet__addr">' + ADDR + '</p>' +
+        '<div class="dir-sheet__opts">' +
+          '<a class="dir-sheet__opt" data-app="apple" target="_blank" rel="noopener">Apple Maps<span aria-hidden="true">&rarr;</span></a>' +
+          '<a class="dir-sheet__opt" data-app="google" target="_blank" rel="noopener">Google Maps<span aria-hidden="true">&rarr;</span></a>' +
+          '<a class="dir-sheet__opt" data-app="waze" target="_blank" rel="noopener">Waze<span aria-hidden="true">&rarr;</span></a>' +
+        '</div>' +
+        '<button type="button" class="dir-sheet__cancel">Cancel</button>' +
+      '</div>';
+    document.body.appendChild(sheet);
+    sheet.addEventListener("click", function (e) {
+      if (e.target === sheet || e.target.closest(".dir-sheet__cancel")) closeSheet();
+      else if (e.target.closest(".dir-sheet__opt")) setTimeout(closeSheet, 50);
+    });
+    sheet.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") { e.preventDefault(); closeSheet(); return; }
+      if (e.key !== "Tab") return;
+      var f = sheet.querySelectorAll("a, button");
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+  };
+
+  var openSheet = function (link) {
+    if (!sheet) buildSheet();
+    var q = "";
+    try { q = new URL(link.href).searchParams.get("query") || ""; } catch (err) {}
+    if (!q) q = ADDR;
+    // "Perico's 2500 Yale Blvd SE ..." -> "Perico's"; plain address -> "Yale Landing"
+    var name = q.split(/\s+2500\b/)[0].trim();
+    if (!name || /^2500\b/.test(q)) name = "Yale Landing";
+    sheet.querySelector(".dir-sheet__title").textContent = name;
+    sheet.querySelector('[data-app="apple"]').href =
+      "https://maps.apple.com/?daddr=" + encodeURIComponent(ADDR) + "&dirflg=d";
+    sheet.querySelector('[data-app="google"]').href =
+      "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(q);
+    sheet.querySelector('[data-app="waze"]').href =
+      "https://waze.com/ul?ll=" + LL + "&navigate=yes&zoom=17";
+    lastTrigger = link;
+    sheet.hidden = false;
+    document.documentElement.classList.add("dir-open");
+    requestAnimationFrame(function () { sheet.classList.add("is-open"); });
+    sheet.querySelector(".dir-sheet__opt").focus({ preventScroll: true });
+  };
+
+  var closeSheet = function () {
+    if (!sheet || sheet.hidden) return;
+    sheet.classList.remove("is-open");
+    document.documentElement.classList.remove("dir-open");
+    setTimeout(function () { sheet.hidden = true; }, 180);
+    if (lastTrigger) lastTrigger.focus({ preventScroll: true });
+  };
+
+  document.addEventListener("click", function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest && e.target.closest('a[href*="google.com/maps"]');
+    if (!a || a.closest(".dir-sheet")) return;
+    e.preventDefault();
+    openSheet(a);
+  });
+
   // Footer year
   document.querySelectorAll("[data-year]").forEach(function (el) {
     el.textContent = new Date().getFullYear();
